@@ -1,0 +1,150 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://fonts/Roboto-Medium.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://Scripts/PauseMenu.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 30
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=2]
+default_font = SubResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.6, 0.6, 0.6, 0.301961 )
+
+[node name="PauseMenu" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 0.836182
+margin_top = -2.50873
+margin_right = 0.836182
+margin_bottom = -2.50879
+theme = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Main" type="VBoxContainer" parent="."]
+margin_left = 860.0
+margin_top = 431.0
+margin_right = 1060.0
+margin_bottom = 649.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_constants/separation = 6
+alignment = 1
+
+[node name="Resume" type="Button" parent="Main"]
+margin_right = 200.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 200, 50 )
+text = "Resume"
+
+[node name="Settings" type="Button" parent="Main"]
+margin_top = 56.0
+margin_right = 200.0
+margin_bottom = 106.0
+rect_min_size = Vector2( 200, 50 )
+text = "Settings"
+
+[node name="Leave" type="Button" parent="Main"]
+margin_top = 112.0
+margin_right = 200.0
+margin_bottom = 162.0
+rect_min_size = Vector2( 200, 50 )
+text = "Leave"
+
+[node name="Exit" type="Button" parent="Main"]
+margin_top = 168.0
+margin_right = 200.0
+margin_bottom = 218.0
+rect_min_size = Vector2( 200, 50 )
+text = "Exit"
+
+[node name="Settings" type="VBoxContainer" parent="."]
+margin_left = 760.0
+margin_top = 353.0
+margin_right = 1160.0
+margin_bottom = 727.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_constants/separation = 6
+
+[node name="CheckButton" type="CheckButton" parent="Settings"]
+margin_right = 400.0
+margin_bottom = 44.0
+text = "Full Screen"
+
+[node name="BulletLable" type="Label" parent="Settings"]
+margin_top = 50.0
+margin_right = 188.0
+margin_bottom = 86.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Bullet Volume"
+
+[node name="BulletSlider" type="HSlider" parent="Settings"]
+margin_top = 92.0
+margin_right = 400.0
+margin_bottom = 122.0
+rect_min_size = Vector2( 400, 30 )
+max_value = 1.0
+step = 0.1
+
+[node name="PlaneLable" type="Label" parent="Settings"]
+margin_top = 128.0
+margin_right = 186.0
+margin_bottom = 164.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Plane Volume"
+
+[node name="PlaneSlider" type="HSlider" parent="Settings"]
+margin_top = 170.0
+margin_right = 400.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 400, 30 )
+max_value = 1.0
+step = 0.1
+
+[node name="FovLable" type="Label" parent="Settings"]
+margin_top = 206.0
+margin_right = 172.0
+margin_bottom = 242.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Field of View"
+
+[node name="FovSlider" type="HSlider" parent="Settings"]
+margin_top = 248.0
+margin_right = 400.0
+margin_bottom = 278.0
+rect_min_size = Vector2( 400, 30 )
+min_value = 30.0
+max_value = 140.0
+value = 70.0
+
+[node name="Default" type="Button" parent="Settings"]
+margin_top = 284.0
+margin_right = 400.0
+margin_bottom = 326.0
+text = "Default"
+
+[node name="Back" type="Button" parent="Settings"]
+margin_top = 332.0
+margin_right = 400.0
+margin_bottom = 374.0
+text = "Back"
+[connection signal="pressed" from="Main/Resume" to="." method="resume"]
+[connection signal="pressed" from="Main/Settings" to="." method="open_settings"]
+[connection signal="pressed" from="Main/Leave" to="." method="leave"]
+[connection signal="pressed" from="Main/Exit" to="." method="exit"]
+[connection signal="toggled" from="Settings/CheckButton" to="." method="change_fullscreen"]
+[connection signal="value_changed" from="Settings/BulletSlider" to="." method="change_bullet_volume"]
+[connection signal="value_changed" from="Settings/PlaneSlider" to="." method="change_plane_volume"]
+[connection signal="value_changed" from="Settings/FovSlider" to="." method="change_fov"]
+[connection signal="pressed" from="Settings/Default" to="." method="set_defaults"]
+[connection signal="pressed" from="Settings/Back" to="." method="back_to_main"]

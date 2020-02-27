@@ -14,6 +14,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 margin_right = 1920.0
@@ -46,7 +49,7 @@ margin_top = 134.0
 margin_right = 336.0
 margin_bottom = 173.0
 custom_fonts/font = ExtResource( 2 )
-max_length = 16
+max_length = 12
 caret_blink = true
 caret_blink_speed = 0.5
 

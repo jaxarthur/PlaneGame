@@ -1,5 +1,4 @@
 extends Node
-class_name Bullets
 
 var bulletObj: PackedScene = preload("res://Scenes/Bullet.tscn")
 var bulletNum: int = 0
@@ -8,7 +7,34 @@ var game: Node
 
 func _ready():
 	game = get_node("/root/Game")
-	
+
+func update_bullets(_bulletData: Array):
+	var _bullets: Array = get_children()
+	#_add_bullets(_bulletData, _bullets)
+	#_del_bullets(_bulletData, _bullets)
+
+func _add_bullets(_bulletData: Array, _bullets: Array):
+	for i in _bulletData:
+		var contains = false
+		for _bullet in _bullets:
+			if _bullet.name == str(i):
+				contains = true
+		
+		if !contains:
+			var _bullet: Bullet = preload("res://Scenes/Bullet.tscn").instance()
+			_bullet.name = str(i)
+			add_child(_bullet)
+
+func _del_bullets(_bulletData: Array, _bullets: Array):
+	for _bullet in _bullets:
+		var exists = false
+		for i in _bulletData:
+			if _bullet.name == str(i):
+				exists = true
+		
+		if (!exists):
+			_bullet.queue_free()
+
 func spawn_client(_pos, _rot):
 	var _id: int = get_tree().get_network_unique_id()
 	if (_id == 1):
@@ -18,18 +44,19 @@ func spawn_client(_pos, _rot):
 
 remote func spawn(_pos, _rot, _id):
 	var bullet: Object = bulletObj.instance()
-	bulletNum += 1
-	
 	bullet.set_name(str(bulletNum))
+	get_node("/root/Game").data["bullets"].append(bulletNum)
+	rpc_unreliable("spawn_all", bulletNum)
+	bulletNum += 1
 	add_child(bullet)
 	bullet.translation = _pos
 	bullet.rotation = _rot
 	bullet.own = _id
-	rpc("spawn_all", bulletNum)
+	add_child(bullet)
 
 remote func spawn_all(_num):
 	var bullet: Node = bulletObj.instance()
-	bullet.set_name(str(_num))
+	bullet.set_name(str(bulletNum))
 	add_child(bullet)
 
 func hit(_other, _owner):

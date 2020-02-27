@@ -41,7 +41,7 @@ func _ready():
 	mat.albedo_color = PlayerColor
 	get_node("Body").mesh.surface_set_material(0, mat)
 
-func _process(delta):
+func _process(_delta):
 	if translation.y < minHeight and is_network_master():
 		var game = get_node("/root/Game")
 		game.data["players"][get_tree().get_network_unique_id()]["health"] -= 100

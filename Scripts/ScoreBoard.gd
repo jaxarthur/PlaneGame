@@ -43,5 +43,5 @@ func _updateTiles(_playerData: Dictionary, _tiles: Array):
 		var _tile: Label = get_node(str(_key))
 		var _data: Dictionary = _playerData[_key]
 		
-		var _text: String = "%-8s %-4s %-4s" % [str(_data["name"]), str(_data["deaths"]), str(_data["kills"])]
+		var _text: String = "%-14s %-7s %-5s" % [str(_data["name"]), str(_data["deaths"]), str(_data["kills"])]
 		_tile.text = _text

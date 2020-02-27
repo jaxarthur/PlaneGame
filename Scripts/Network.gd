@@ -8,38 +8,47 @@ var ip: String
 var playerName: String = "bob"
 var playerColor: Color = Color.red
 
-var data: Dictionary = {"players": {}, "bullets": []}
+var data: Dictionary = {"players": {}}
 var dataPrintTimer: float = 0
 
 var players: Players
 var scoreBoard: ScoreBoard
-var bullets: Bullets
+
+var pauseMenu: PauseMenu
+var pauseMenuActive: bool = false
+var inGame: bool = false
 
 const hex: Dictionary = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "a": 10, "b": 11, "c": 12, "d": 13, "e": 14, "f": 15}
 
 
 func _ready():
+# warning-ignore:return_value_discarded
 	get_tree().connect("network_peer_connected", self, "_player_connected")
+# warning-ignore:return_value_discarded
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+# warning-ignore:return_value_discarded
 	get_tree().connect("connected_to_server", self, "_connection_good")
+# warning-ignore:return_value_discarded
 	get_tree().connect("connection_failed", self, "_connection_fail")
+# warning-ignore:return_value_discarded
 	get_tree().connect("server_disconnected", self, "_connection_lost")
 
 	scoreBoard = get_node("/root/Game/UI/ScoreBoardPanel/ScoreBoard")
 	players = get_node("/root/Game/Players")
-	bullets = get_node("/root/Game/Bullets")
+	pauseMenu = get_node("/root/Game/PauseMenu")
 
 func _process(delta):
 	if (get_tree().network_peer != null):
 		if (get_tree().is_network_server()):
 			rpc_unreliable("_update_clients", data)
-			dataPrintTimer += delta
-			if dataPrintTimer >= 2:
-				#print_debug(data)
-				dataPrintTimer = 0
 	
-	if (Input.is_action_pressed("quit")):
-		get_tree().quit(1)
+	if (Input.is_action_just_pressed("pause")):
+		if (pauseMenuActive):
+			pauseMenu.hide_pause_menu()
+			pauseMenuActive = false
+		else:
+			pauseMenu.show_pause_menu(inGame)
+			pauseMenuActive = true
 
 #Peer Events
 func _player_connected(_id):
@@ -70,6 +79,7 @@ func host(_name, _color):
 	ip = _get_ip()
 	code = _encode(ip)
 	_set_code_display()
+	inGame = true
 
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(8008, 50)
@@ -83,6 +93,7 @@ func join(_code, _name, _color):
 	code = _code
 	ip = _decode(code)
 	_set_code_display()
+	inGame = true
 
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_client(ip, 8008)
@@ -119,6 +130,7 @@ func _encode(_ip: String):
 	var _code = ""
 	var _temp = 0
 	for i in _ipArray:
+# warning-ignore:integer_division
 		_temp = hex.keys()[int(i)/ 16]
 		_temp = _temp + hex.keys()[int(i) % 16]
 		_code = _code + _temp
@@ -145,4 +157,3 @@ func _display_menu(_bool: bool):
 remotesync func _update_clients(_data: Dictionary):
 	scoreBoard.updateBoard(_data["players"])
 	players.update_players(_data["players"])
-	bullets.update_bullets(_data["bullets"])

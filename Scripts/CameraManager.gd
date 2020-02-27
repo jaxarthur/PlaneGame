@@ -18,7 +18,7 @@ func _ready():
 		camera = get_node(NodePath("./../../../Camera"))
 		player = get_node(NodePath("./.."))
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if is_network_master():
 		playerBasis = player.transform.basis
 		playerPosition = player.translation
