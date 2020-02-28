@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/InputManager.gd" type="Script" id=2]
@@ -68,6 +68,43 @@ surfaces/0 = {
 "vertex_count": 564
 }
 
+[sub_resource type="Gradient" id=8]
+colors = PoolColorArray( 0, 0, 0, 1, 0.730469, 0.727487, 0.727487, 1 )
+
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 8 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+direction = Vector3( 0, 1, 0 )
+gravity = Vector3( 0, 0.5, 0 )
+initial_velocity = 1.0
+initial_velocity_random = 1.0
+color_ramp = SubResource( 9 )
+
+[sub_resource type="SpatialMaterial" id=10]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="CubeMesh" id=7]
+material = SubResource( 10 )
+size = Vector3( 0.1, 0.1, 0.1 )
+
+[sub_resource type="Gradient" id=11]
+colors = PoolColorArray( 1, 0.72549, 0, 1, 1, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=12]
+gradient = SubResource( 11 )
+
+[sub_resource type="ParticlesMaterial" id=13]
+direction = Vector3( 0, 1, 0 )
+gravity = Vector3( 0, 0.5, 0 )
+initial_velocity = 1.0
+initial_velocity_random = 1.0
+color_ramp = SubResource( 12 )
+
+[sub_resource type="CubeMesh" id=14]
+material = SubResource( 10 )
+size = Vector3( 0.1, 0.1, 0.1 )
+
 [node name="Player" type="RigidBody"]
 can_sleep = false
 linear_damp = 1.0
@@ -109,3 +146,23 @@ stream = ExtResource( 3 )
 unit_db = 6.0
 bus = "Bullet"
 doppler_tracking = 2
+
+[node name="SmokeParticles" type="Particles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.80895, 1.80304 )
+amount = 30
+lifetime = 2.73
+process_material = SubResource( 6 )
+draw_pass_1 = SubResource( 7 )
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="FireParticles" type="Particles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.80895, 1.80304 )
+amount = 30
+lifetime = 1.65
+process_material = SubResource( 13 )
+draw_pass_1 = SubResource( 14 )
+__meta__ = {
+"_editor_description_": ""
+}

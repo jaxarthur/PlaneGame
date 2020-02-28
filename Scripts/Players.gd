@@ -44,6 +44,8 @@ func _update_players(_playerData: Dictionary, _players: Array):
 		healthTemp.value = _playerData[_id]["health"]
 		if(_playerData[_id]["health"] <= 0):
 			_respawn_player(_id)
+		get_node(str(_id)).health = _playerData[_id]["health"]
+		
 		
 func _respawn_player(_id: int):
 	var _trans: Transform = _get_spawn()

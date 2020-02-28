@@ -30,6 +30,8 @@ var right: Vector3
 var up: Vector3
 var transformBasis: Basis
 
+var health: float;
+
 func _ready():
 	inputManager = find_node("InputManager")
 	self.angular_damp = .9999
@@ -46,6 +48,9 @@ func _process(_delta):
 		var game = get_node("/root/Game")
 		game.data["players"][get_tree().get_network_unique_id()]["health"] -= 100
 		game.data["players"][get_tree().get_network_unique_id()]["deaths"] += 1
+	
+	if is_network_master():
+		rpc("updateParticles", health)
 
 func _integrate_forces(state: PhysicsDirectBodyState):
 	if self.is_network_master():
@@ -112,4 +117,14 @@ remotesync func plane_sound(_speed: float):
 			_sound.play()
 	else:
 		_sound.stop()
+
+remotesync func updateParticles(_health: float):
+	if (_health <= 25):
+		get_node("FireParticles").emitting = true
+	else:
+		get_node("FireParticles").emitting = false
 	
+	if (_health <= 50):
+		get_node("SmokeParticles").emitting = true
+	else:
+		get_node("SmokeParticles").emitting = false
