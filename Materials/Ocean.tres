@@ -37,6 +37,8 @@ void fragment() {
 [sub_resource type="OpenSimplexNoise" id=2]
 
 [sub_resource type="NoiseTexture" id=3]
+width = 1024
+height = 1024
 seamless = true
 noise = SubResource( 2 )
 
@@ -44,5 +46,5 @@ noise = SubResource( 2 )
 shader = SubResource( 1 )
 shader_param/heightScale = 20.0
 shader_param/noiseScale = 0.7
-shader_param/moveSpeed = Vector2( 0.05, 0.05 )
+shader_param/moveSpeed = Vector2( 0.025, 0.025 )
 shader_param/noise = SubResource( 3 )
