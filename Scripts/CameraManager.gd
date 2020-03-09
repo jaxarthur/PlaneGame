@@ -1,11 +1,11 @@
 extends Node
 
-var camera: Camera;
+var camera: ARVROrigin;
 var player: RigidBody;
-var positionOffset: Vector3 = Vector3(0,3,-6)
-var rotationOffset: Quat = Quat(Vector3(0,1,0),PI) * Quat(Vector3(1,0,0), -PI/8)
-var positionSpeed: float = .9
-var rotationSpeed: float = .9
+var positionOffset: Vector3 = Vector3(0,1,1)
+var rotationOffset: Quat = Quat(Vector3(0,1,0),PI) * Quat(Vector3(1,0,0), 0)
+var positionSpeed: float = 1
+var rotationSpeed: float = 1
 
 var positionNew: Vector3;
 var rotationNew: Vector3;
@@ -18,13 +18,13 @@ func _ready():
 		camera = get_node(NodePath("./../../../Camera"))
 		player = get_node(NodePath("./.."))
 
-func _physics_process(_delta):
+func _process(_delta):
 	if is_network_master():
 		playerBasis = player.transform.basis
 		playerPosition = player.translation
 		
 		positionNew = playerPosition + (playerBasis.x * positionOffset.x + playerBasis.y * positionOffset.y + playerBasis.z * positionOffset.z)
 		
-		camera.translation = camera.translation.linear_interpolate(positionNew, positionSpeed)
+		camera.translation = positionNew
 		
-		camera.transform.basis = Basis(Quat(camera.transform.basis).slerp(Quat(player.transform.basis) * rotationOffset, rotationSpeed))
+		camera.transform.basis = Quat(player.transform.basis) * rotationOffset

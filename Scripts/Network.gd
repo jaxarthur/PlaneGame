@@ -22,6 +22,14 @@ const hex: Dictionary = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6,
 
 
 func _ready():
+	var VR = ARVRServer.find_interface("OpenVR")
+	if VR and VR.initialize():
+		get_viewport().arvr = true
+		get_viewport().hdr = false
+
+		OS.vsync_enabled = false
+		Engine.target_fps = 90
+	
 # warning-ignore:return_value_discarded
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 # warning-ignore:return_value_discarded
